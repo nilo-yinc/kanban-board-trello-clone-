@@ -70,7 +70,22 @@ columns.forEach((column) => {
 
 function dragover(event) {
   event.preventDefault();
-  this.appendChild(draggedCard);
+  //this.appendChild(draggedCard);
+
+  const afterElement = getDragAfterElement();
+
+  if(afterElement === null){
+    this.appendChild(draggedCard);
+  } else {
+    this.insertBefore(draggedCard,afterElement);
+  }
+}
+
+function getDragAfterElement(container,y){
+  const draggableElement = {
+    ...container.querySelectorAll(".card:not(dragginng)"),
+  }
+
 }
 
 const contextmenu = document.querySelector(".context-menu");

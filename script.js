@@ -70,9 +70,10 @@ columns.forEach((column) => {
 
 function dragover(event) {
   event.preventDefault();
+  const draggedCard = document.querySelector(".dragging");
   //this.appendChild(draggedCard);
 
-  const afterElement = getDragAfterElement();
+  const afterElement = getDragAfterElement(this, event.pageY);
 
   if(afterElement === null){
     this.appendChild(draggedCard);
@@ -82,9 +83,24 @@ function dragover(event) {
 }
 
 function getDragAfterElement(container,y){
-  const draggableElement = {
-    ...container.querySelectorAll(".card:not(dragginng)"),
-  }
+  const draggableElement = [
+    ...container.querySelectorAll(".card:not(.dragginng)"),
+  ]; // NodeList => Array
+
+  const result = draggableElement.reduce(
+    (closestElementUnderMouse, currentTask) => {
+      const box = currentTask.getBoundingClientRect();
+      const offset = y - (box.top + box.height/2);
+      if(offset < 0 && offset > closestElementUnderMouse.offset){
+        return {offset : offset , element : currentTask };
+
+      } else {
+        return closestElementUnderMouse;
+     }
+    },
+    {offset : Number.NEGATIVE_INFINITY }
+  );
+  return result.element;
 
 }
 
@@ -99,16 +115,32 @@ document.addEventListener("click", () => {
   contextmenu.style.display = "none";
 });
 
+// function editTask() {
+//   if (rightClickedCard !== null) {
+//     const newTaskText = prompt("Edit task - ", rightClickedCard.textContent);
+
+//     if (newTaskText !== "") {
+//       rightClickedCard.textContent = newTaskText;
+//       updateLocalStorage();
+//     }
+//   }
+// }
+
 function editTask() {
   if (rightClickedCard !== null) {
-    const newTaskText = prompt("Edit task - ", rightClickedCard.textContent);
+    const currentText = rightClickedCard.querySelector("span")?.textContent || "";
+    const newTaskText = prompt("Edit task - ", currentText);
 
-    if (newTaskText !== "") {
-      rightClickedCard.textContent = newTaskText;
-      updateLocalStorage();
+    if (newTaskText !== null && newTaskText.trim() !== "") {
+      const span = rightClickedCard.querySelector("span");
+      if (span) {
+        span.textContent = newTaskText;
+        updateLocalStorage();
+      }
     }
   }
 }
+
 
 function deleteTask() {
   if (rightClickedCard !== null) {

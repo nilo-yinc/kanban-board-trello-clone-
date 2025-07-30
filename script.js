@@ -84,7 +84,7 @@ function dragover(event) {
 
 function getDragAfterElement(container,y){
   const draggableElement = [
-    ...container.querySelectorAll(".card:not(.dragginng)"),
+    ...container.querySelectorAll(".card:not(.dragging)"),
   ]; // NodeList => Array
 
   const result = draggableElement.reduce(

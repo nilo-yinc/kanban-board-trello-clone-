@@ -44,7 +44,7 @@ A **Kanban-style task management application** inspired by [Trello](https://trel
 
 ## 💻 How to Run
 
-1. Clone this repository:
+1. Copy the below link :
    ```bash
-   git clone https://github.com/yourid/trello-clone.git
+   trello-clone-nu-lovat.vercel.app
 
